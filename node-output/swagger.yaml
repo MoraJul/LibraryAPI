@@ -1,0 +1,249 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "База данных о книгах в библиотеке OpenAPI спецификация",
+    "description" : "",
+    "version" : "1"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/MoraJul/Library/1",
+    "description" : "Development server"
+  } ],
+  "paths" : {
+    "/books" : {
+      "get" : {
+        "tags" : [ "Books" ],
+        "summary" : "Метод получения списка книг",
+        "operationId" : "getAllBooks",
+        "parameters" : [ {
+          "name" : "genre",
+          "in" : "query",
+          "description" : "Жанр книги",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "horror", "romance", "crime", "adventure", "fantasy" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ со списком книг",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Books"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Если что-то пошло не так",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Books" ],
+        "summary" : "Метод добавления книги",
+        "operationId" : "addBook",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Book"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ с добавленной книгой",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Если что-то пошло не так",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/books/{bookID}" : {
+      "get" : {
+        "tags" : [ "Books" ],
+        "summary" : "Метод получения книги по ID",
+        "operationId" : "getBookByID",
+        "parameters" : [ {
+          "name" : "bookID",
+          "in" : "path",
+          "description" : "Идентификатор книги",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Если что-то пошло не так",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Books" ],
+        "summary" : "Метод редактирования существующей книги по ID",
+        "operationId" : "updateBookByID",
+        "parameters" : [ {
+          "name" : "bookID",
+          "in" : "path",
+          "description" : "Идентификатор книги, которую нужно редактировать",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "$ref" : "#/components/schemas/Book"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Успешный ответ",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Если что-то пошло не так",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Books" ],
+        "summary" : "Метод удаления книги",
+        "operationId" : "deleteBookByID",
+        "parameters" : [ {
+          "name" : "bookID",
+          "in" : "path",
+          "description" : "Идентификатор книги",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Успешное удаление книги",
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "default" : {
+            "description" : "Если что-то пошло не так",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Errors"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Book" : {
+        "required" : [ "authorID", "name" ],
+        "type" : "object",
+        "properties" : {
+          "bookID" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "genre" : {
+            "type" : "string",
+            "enum" : [ "horror", "romance", "crime", "adventure", "fantasy" ]
+          },
+          "year" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "authorID" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Books" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/Book"
+        }
+      },
+      "Errors" : {
+        "required" : [ "code", "massage" ],
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer"
+          },
+          "massage" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
