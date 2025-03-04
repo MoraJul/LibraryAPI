@@ -26,6 +26,26 @@
             "type" : "string",
             "enum" : [ "horror", "romance", "crime", "adventure", "fantasy" ]
           }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Номер страницы для пагинации",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "recordsPerPage",
+          "in" : "query",
+          "description" : "Количество записей на странице",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -33,7 +53,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Books"
+                  "$ref" : "#/components/schemas/inline_response_200"
                 }
               }
             }
@@ -139,9 +159,19 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "$ref" : "#/components/schemas/Book"
+            "type" : "string"
           }
         } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Book"
+              }
+            }
+          },
+          "required" : true
+        },
         "responses" : {
           "200" : {
             "description" : "Успешный ответ",
@@ -241,6 +271,40 @@
           },
           "massage" : {
             "type" : "string"
+          }
+        }
+      },
+      "Pagination" : {
+        "required" : [ "pageIndex", "recordsPerPage" ],
+        "type" : "object",
+        "properties" : {
+          "pageIndex" : {
+            "type" : "integer",
+            "example" : 1
+          },
+          "recordsPerPage" : {
+            "type" : "integer",
+            "example" : 5
+          },
+          "totalRecords" : {
+            "type" : "integer",
+            "example" : 5000
+          }
+        },
+        "description" : "объект пагинации"
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "books" : {
+            "type" : "array",
+            "description" : "Список книг",
+            "items" : {
+              "$ref" : "#/components/schemas/Books"
+            }
+          },
+          "pagination" : {
+            "$ref" : "#/components/schemas/Pagination"
           }
         }
       }
